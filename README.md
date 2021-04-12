@@ -1,6 +1,6 @@
 <h1>Projeto Api Rest com Testes Únitarios e Testes de Integração</h1>
 <p>Projeto para livraria, com cadastro e controle de aluguel de livros, seguindo o curso de Design de API's RestFul com <b>Spring Boot</b> utilizando <b>TDD</b> e <b>JUnit 5</b>
-da <a href="https://www.udemy.com/course/design-de-apis-restful-com-tdd-spring-boot-e-junit-5/">Udemy</a>.</p>
+da <a href="https://www.udemy.com/course/design-de-apis-restful-com-tdd-spring-boot-e-junit-5/" target="_blank">Udemy</a>.</p>
 <p>Estão sendo utilizados os seguintes recursos no desenvolvimento: </p>
 <ul>
 <li>Java 11</li>
