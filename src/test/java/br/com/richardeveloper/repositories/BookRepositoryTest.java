@@ -2,6 +2,8 @@ package br.com.richardeveloper.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,5 +51,49 @@ class BookRepositoryTest {
 		assertThat(existsByIsbn).isFalse();
 		
 	}
+	
+	@Test
+	@DisplayName("Deve retornar um livro pelo Id")
+	public void findByIdTest() {
+		
+		Book book = Book.builder().author("James Jhonson").title("As Aventuras de James Jhonson").isbn("1029384756").build();
+		entityManager.persist(book);
+		
+		Optional<Book> foundBook = repository.findById(book.getId());
+		
+		assertThat(foundBook.isPresent()).isTrue();
+		
+	}
+	
+	@Test
+	@DisplayName("Deve salvar um livro com sucesso")
+	public void saveBookTest() {
+		
+		Book book = Book.builder().author("James Jhonson").title("As Aventuras de James Jhonson").isbn("1029384756").build();
+		
+		Book savedBook = repository.save(book);
+				
+		assertThat(savedBook.getId()).isNotNull();
+		assertThat(savedBook.getAuthor()).isEqualTo(book.getAuthor());
+		assertThat(savedBook.getTitle()).isEqualTo(book.getTitle());
+		assertThat(savedBook.getIsbn()).isEqualTo(book.getIsbn());
+	}
+	
+	@Test
+	@DisplayName("Deve deletar um livro com sucesso")
+	public void deleteBookTest() {
+		
+		Book book = Book.builder().author("James Jhonson").title("As Aventuras de James Jhonson").isbn("1029384756").build();
+		entityManager.persist(book);
+		
+		Book foundBook = entityManager.find(Book.class, book.getId());
+		
+		repository.delete(foundBook);
+		
+		Book deletedBook = entityManager.find(Book.class, book.getId());
+		
+		assertThat(deletedBook).isNull(); 
+	}
 
+	
 }

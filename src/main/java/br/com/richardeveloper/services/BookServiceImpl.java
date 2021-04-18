@@ -1,7 +1,12 @@
 package br.com.richardeveloper.services;
 
-import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.stereotype.Service;
 
 import br.com.richardeveloper.models.Book;
@@ -16,14 +21,32 @@ public class BookServiceImpl implements BookService {
 	public BookServiceImpl(BookRepository repository) {
 		this.repository = repository;
 	}
-	
-	public List<Book> findAll() {
-		return repository.findAll();
+
+	@Override
+	public Optional<Book> findById(Long id) {
+		return this.repository.findById(id);
 	}
-	
+		
+	@Override
 	public Book save(Book book) {
 		validation(book);
-		return repository.save(book);
+		return this.repository.save(book);
+	}
+
+	@Override
+	public void delete(Book book) {
+		if(book == null || book.getId() == null) {
+			throw new IllegalArgumentException("Book id cant be null");
+		}
+		this.repository.delete(book);
+	}
+
+	@Override
+	public Book update(Book book) {
+		if(book == null || book.getId() == null) {
+			throw new IllegalArgumentException("Book id cant be null");
+		}
+		return this.repository.save(book);
 	}
 
 	public void validation(Book book) {
@@ -34,5 +57,22 @@ public class BookServiceImpl implements BookService {
 			throw new BusinessException("Título já cadastrado.");
 		}
 	}
+
+	@Override
+	public Page<Book> findByAuthorAndTitle(Book book, Pageable pageable) {
+		Example<Book> example = Example.of(book, 
+				ExampleMatcher.matching()
+							  .withIgnoreCase()
+							  .withIgnoreNullValues()
+							  .withStringMatcher(StringMatcher.CONTAINING));
+		return repository.findAll(example, pageable);
+	}
+
+	@Override
+	public Optional<Book> findByIsbn(String isbn) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }
